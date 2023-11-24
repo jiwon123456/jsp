@@ -6,9 +6,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<script  src="http://code.jquery.com/jquery-latest.min.js"></script>		
-		<link rel="stylesheet" type="text/css" href="css/style_header.css">
 		<link rel="stylesheet" type="text/css" href="css/style_join01_terms.css">
-		<link rel="stylesheet" type="text/css" href="css/style_footer.css">
 		<title>회원가입 - 약관동의</title>
 		<script>
 			$(function(){
@@ -63,6 +61,7 @@
 		
 		<section>
 			<form name="agreeFrm" method="post" action="join02_info_input.do">
+			<input type="hidden" name="test" value="1111">
 				<div id="subBanner"></div>
 				<div id="locationN">
 					<ul>

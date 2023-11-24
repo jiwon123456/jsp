@@ -4,44 +4,53 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	    <c:if test="${param.f_agree != 'agree'}">
+			<script>
+			alert("${param.f_agree}");
+			alert("약관동의 없이는 회원가입이 불가합니다.");
+			location.href="join01_terms.do";
+			</script>
+		</c:if>
 		<meta charset="UTF-8">
 		<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>	
 		<link rel="stylesheet" type="text/css" href="css/style_join02_info_input.css">
-		<title>회원가입 - 회원정보입력</title>
+		<title>회원가입 - 회원정보입력 </title>
 		<style>
-			.txtOn{color:blue; font-weight:700;}	
-			.txtOff{color:red; font-weight:700;}	
+		.txtOn{color:blue; font-weight:900;}
+		.txtOff{color:red; font-weight:900;}
 		</style>
 		<script>
 			$(function(){
-				var idConfirm = 0;
+					var idConfirm = 0;
 				
 				$("#insertBtn").click(function(){
-					//alert($("#id").val());
+					//alert($("#id").val));
 					var id = $("#id").val();
 					//var name = $("#name").val();
 					//var pw = $("#pw1").val();
 					//var f_tell = $("#f_tell").val();
 					//var m_tell = $("#m_tell").val();
-					var idPtn = /^[a-zA-Z0-9]{4,16}$/; //영문자 4~16자리 사이 값을 비교 패턴
-					//var idPtn = /^[a-z]{1}[a-zA-Z0-9]{3,15}$/; //첫글자는 영문소문자, 영문자,숫자가능 4~16자리 사이 값을 비교 패턴
-					//var namePtn = /^[가-힣]{1,3}$/; //국문 1~3자리까지 가능
-					//var pwPtn = /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*<>]).{3,}$/; // 영문자,숫자,특수문자 1개이하
-					//var f_tellPtn = /^[0-9]{3}$/; //유선전화가능 국번02,043,010
-					//var m_tellPtn = /^[0-9]{3,4}$/; // 415,1111
+					//var idPtn = /^[a-zA-Z0-9]{4,16}$/; //영문 대소문자 4~16째자리값을 비교하는 패턴
+					//var idPtn = /^[a-z]{1}[a-zA-Z0-9]{3,15}$/; //첫글자 영문소문자 지정 +영문 대소문자/숫자 4~16자리 패턴
+					//var namePtn = /^[가-힣]{1,4}$/; //한글 1-4자리 값을 비교하는 패턴
+					//var pwPtn = /^(?=.*[a-z])(?=.*[0-9])(?=.*[~!@#$%^&*]).{3,}$/; // 영문자,숫자,특수문자 1개 이상 패턴
+					//var f_tellPtn = /^[0-9]{2,3}$/; //유선전화번호 국번 3자리 값 패턴
+					//var m_tellPtn = /^[0-9]{4}$/; //유선전화번호 가운데 4자리 값 패턴
+					
 					if(!idPtn.test(id)){
-						alert("1개의 영문소문자 및 숫자가 포함되어야 합니다.");
+						alert("영문자 및 숫자 2-10자리 이하로 입력하셔야 합니다.");
 						return false;
 					}else{
-						alert("정상입력되었습니다.");
+						alert("정상 입력되었습니다.");
 					}
-					
-				});//insertBtn
+					//전송
+					agreeFrm.submit();
+				});
 				
-				//pw1,pw2 비교
+				//pw1, pw2 비교
 				$("#pw2").keyup(function(){
-					if($("#pw1").val() != $("#pw2").val()){
+					if($("#pw1").val()!=$("#pw2").val()){
 						$("#txtPw").text("비밀번호가 일치하지 않습니다.");
 						$("#txtPw").addClass("txtOff");
 						$("#txtPw").removeClass("txtOn");
@@ -50,22 +59,22 @@
 						$("#txtPw").addClass("txtOn");
 						$("#txtPw").removeClass("txtOff");
 					}
-					
-				});//keyup
+				});
 				
-				//우편번호검색
+				//우편번호 검색
 				$("#postBtn").click(function(){
-					alert("daum 우편번호 검색창으로 이동");
-					new daum.Postcode({
-					       oncomplete: function(data) {
-					    	   $("#f_postal").val(data.zonecode);
-					    	   $("#address1").val(data.address);
-					       }
-					 }).open();
-					
-				});//postBtn
+					alert("Daum 우편번호 검색창으로 이동합니다.");
+					 new daum.Postcode({
+					        oncomplete: function(data) {
+					            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+					            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+					        $("#f_postal").val(data.zonecode);   
+					        $("#address1").val(data.address);   
+					        }
+					    }).open();
+				});
 				
-				//id체크
+				//아이디 확인
 				$("#idChkBtn").click(function(){
 					alert("아이디를 중복체크합니다.");
 					var id = $("#id").val();
@@ -76,18 +85,18 @@
 						dataType:"text", //text,json,xml,html
 						success:function(data){
 							//alert(data);
-							if(data == '사용가능'){
-								//txtIdChk
-								$("#txtIdChk").text(data);
+							if(data=='사용 가능'){
+								$("#txtIdChk").text("사용 가능한 아이디입니다.");
 								$("#txtIdChk").addClass("txtOn");
 								$("#txtIdChk").removeClass("txtOff");
 								idConfirm = 1;
 							}else{
-								$("#txtIdChk").text(data);
-								$("#txtIdChk").addClass("txtOff");
+								$("#txtIdChk").text("사용 불가능한 아이디입니다.");
 								$("#txtIdChk").removeClass("txtOn");
+								$("#txtIdChk").addClass("txtOff");
 								idConfirm = 0;
 							}
+							
 							console.log("받은 결과값 : "+data)
 						},			
 						error:function(){
@@ -95,7 +104,6 @@
 						}
 						
 					});//ajax
-					
 				});//idChkBtn
 			});//jquery
 		</script>
@@ -136,7 +144,7 @@
 		
 		
 		<section>
-			<form name="agree" method="get" action="join03_success.html">
+			<form name="agreeFrm" method="post" action="join03_success.do">
 				<div id="subBanner"></div>
 				<div id="locationN">
 					<ul>
@@ -189,14 +197,14 @@
 						<dd>
 							<input type="text" id="id" name="id" minlength="4" maxlength="16" required/>
 							<input type="button" id="idChkBtn" value="중복확인"/> 
-							<span id="txtIdChk"></span>
+							<span id="txtIdChk">사용 가능한 아이디입니다.</span>
 							<span>4~16자리의 영문, 숫자, 특수기호(_)만 사용하실 수 있습니다. 첫 글자는 영문으로 입력해 주세요.</span>
 						</dd>
 					</dl>
 					<dl id="join_pw1_dl">
 						<dt>
 							<div></div>
-							<label for="pw1">비밀번호</label>
+							<label for="pw1">비밀번호</label> 
 						</dt>
 						<dd>
 							<input type="password" id="pw1" name="pw1" minlength="8" required />
@@ -211,7 +219,7 @@
 						</dt>
 						<dd>
 							<input type="password" id="pw2" name="pw2" minlength="8" required />
-							<span id="txtPw">비밀번호를 다시 한번 입력해 주세요.</span>
+							<span id="txtPw">비밀번호를 다시 한 번 입력해 주세요.</span>
 						</dd>
 					</dl>
 					<dl id="join_mail_dl">
@@ -219,21 +227,29 @@
 							<div></div>
 							<label for="mail_id">이메일</label>
 						</dt>
+						<script>
+							$(function(){
+								$("#chgMail").change(function(){
+									if($("#chgMail").val() == ""){
+										$("#mail_tail").val("");
+										$("#mail_tail").prop("readonly",false);
+									}else{
+										$("#mail_tail").val($("#chgMail").val());
+										$("#mail_tail").prop("readonly",true);
+									}
+								});
+							});
+						</script>
 						<dd>
 							<input type="text" id="mail_id" name="mail_id" required />
 							<span>@</span>
-							<input type="text" id="main_tail" name="mail_tail" required />
-							<select>
-								<option selected>직접입력</option>
-								<option>지메일</option>
-								<option>네이버</option>
-								<option>네이트</option>
-								<option>핫메일</option>
-								<option>파란</option>
-								<option>엠팔</option>
-								<option>야후</option>
-								<option>드림위즈</option>
-								<option>한메일(다음)</option>
+							<input type="text" id="mail_tail" name="mail_tail" required />
+							<select id="chgMail">
+								<option value="" selected>직접입력</option>
+								<option value="gmail.com">지메일</option>
+								<option value="naver.com">네이버</option>
+								<option value="daum.net">다음</option>
+								<option value="nate.com">네이트</option>
 							</select>
 						</dd>
 					</dl>
@@ -245,6 +261,7 @@
 						</dt>
 						<dd>
 							<input type="text" id="f_postal" name="f_postal" required readonly/>
+							
 							<input type="button" id="postBtn" value="우편번호"/>
 							<input type="text" id="address1" name="address1" required readonly/>
 							<input type="text" id="address2" name="address2" required />
@@ -265,66 +282,6 @@
 							<input type="text" id="l_tell" name="l_tell" maxlength="4" required />
 						</dd>
 					</dl>
-					<dl id="join_birth_dl">
-						<dt>
-							<div></div>
-							<label for="birth_year">생년월일</label>
-						</dt>
-						<dd>
-							<select id="birth_year" name="birth_year" required>
-								<option selected>선택</option>
-								<option value="1988">1988</option>
-								<option value="1989">1989</option>
-								<option value="1990">1990</option>
-								<option value="1991">1991</option>
-								<option value="1992">1992</option>
-								<option value="1993">1993</option>
-								<option value="1994">1994</option>
-								<option value="1995">1995</option>
-								<option value="1996">1996</option>
-								<option value="1997">1997</option>
-								<option value="1998">1998</option>
-								<option value="1988">1999</option>
-								<option value="1920">2000</option>
-							</select>
-							<span>년</span>
-							<select id="birth_month" name="birth_month" required>
-								<option selected>선택</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-								<option value="11">11</option>
-								<option value="12">12</option>
-							</select>
-							<span>월</span>
-							<select id="birth_day" name="birth_day" required>
-								<option selected>선택</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-							</select>
-							<span>일</span>
-							<div>
-								<input type="radio" name="calendar" id="lunar" value="lunar" checked="checked"/>
-								<label for="lunar">양력</label>
-								<input type="radio" name="calendar" id="solar" value="solar" />
-								<label for="solar">음력</label>
-							</div>
-						</dd>
 					</dl>
 					<dl id="join_gender_dl">
 						<dt>
@@ -340,125 +297,51 @@
 							</div>
 						</dd>
 					</dl>
+					
+					
 				</fieldset>
-
-								
-				<h4>
-					분양 회원 정보 입력 
-					<span>(다구좌 회원일 경우 가지고 계신 카드번호 중 하나를 입력해 주시면 됩니다)</span>
-				</h4>
-				<fieldset class="fieldset_class">
-					<dl id="join_member_number_dl">
-						<dt>
-							<label for="m_number">회원번호</label>
-						</dt>
-						<dd>
-							<input type="text" name="m_number" id="m_number" />
-							<span>하이픈(-)이나 띄어쓰기 없이 입력해 주시기 바랍니다.</span>
-						</dd>
-					</dl>
-					<dl id="join_verification_number_dl">
-						<dt>
-							<label for="v_number">회원인증번호</label>
-						</dt>
-						<dd>
-							<input type="text" name="v_number" id="v_number" />
-							<span>숫자 4자리 입력</span>
-						</dd>
-					</dl>
-				</fieldset>
-				
 				<h4>
 					선택 입력 정보 
 				</h4>
 				<fieldset class="fieldset_class">
 					<dl id="join_job_dl">
-						<dt>
-							<label for="job">직업</label>
-						</dt>
-						<dd>
-							<select id="job" name="job">
-								<option selected>선택</option>
-								<option value="worker">회사원</option>
-								<option value="slef">자영업자</option>
-								<option value="freelancer">프리랜서</option>
-								<option value="housewife">전업주부</option>
-								<option value="student">학생</option>
-								<option value="etc">기타</option>						
-							</select>
-						</dd>
-					</dl>
-					<dl id="join_marital_status_dl">
-						<dt>
-							<label for="">결혼여부</label>
-						</dt>
-						<dd>
-							<input type="radio" name="marital_status" id="marital_status_y" value="yes" />
-							<label for="marital_status_y">예</label>
-							<input type="radio" name="marital_status" id="marital_status_n" value="no" />
-							<label for="marital_status_n">아니오</label>
-						</dd>
 					</dl>
 					<dl id="join_interests_dl">
 						<dt>
-							<label for="">관심사</label>
+							<label for="">취미</label>
 						</dt>
 						<dd>
 							<ul>
 								<li>
-									<input type="checkbox" name="computer" id="computer" value="computer" />
-									<label for="computer">컴퓨터/인터넷</label>
-								</li>
-								<li>
-									<input type="checkbox" name="movie" id="movie" value="movie" />
-									<label for="movie">영화/비디오</label>
-								</li>
-								<li>
-									<input type="checkbox" name="music" id="music" value="music" />
-									<label for="music">음악</label>
-								</li>
-								<li>
-									<input type="checkbox" name="shopping" id="shopping" value="shopping" />
-									<label for="shopping">쇼핑</label>
-								</li>
-								<li>
-									<input type="checkbox" name="game" id="game" value="game" />
+									<input type="checkbox" name="hobby" id="game" value="computer" />
 									<label for="game">게임</label>
 								</li>
 								<li>
-									<input type="checkbox" name="culture" id="culture" value="culture" />
+									<input type="checkbox" name="hobby" id="golf" value="movie" />
+									<label for="golf">골프</label>
+								</li>
+								<li>
+									<input type="checkbox" name="hobby" id="run" value="music" />
+									<label for="run">조깅</label>
+								</li>
+								<li>
+									<input type="checkbox" name="hobby" id="cook" value="shopping" />
+									<label for="cook">요리</label>
+								</li>
+								<li>
+									<input type="checkbox" name="hobby" id="book" value="game" />
+									<label for="book">독서</label>
+								</li>
+								<li>
+									<input type="checkbox" name="hobby" id="culture" value="culture" />
 									<label for="culture">문화/예술</label>
-								</li>
-								<li>
-									<input type="checkbox" name="parenting" id="parenting" value="parenting" />
-									<label for="parenting">육아/아동</label>
-								</li>
-								<li>
-									<input type="checkbox" name="cooking" id="cooking" value="cooking" />
-									<label for="parenting">요리</label>
-								</li>
-								<li>
-									<input type="checkbox" name="interier" id="interier" value="interier" />
-									<label for="interier">인테리어</label>
-								</li>
-								<li>
-									<input type="checkbox" name="leisure" id="leisure" value="leisure" />
-									<label for="leisure">레저/여가</label>
-								</li>
-								<li>
-									<input type="checkbox" name="health" id="health" value="health" />
-									<label for="health">건강/다이어트</label>
-								</li>
-								<li>
-									<input type="checkbox" name="fashion" id="fashion" value="fashion" />
-									<label for="fashion">패션/미용</label>
 								</li>
 							</ul>
 						</dd>
 					</dl>
 				</fieldset>
 				<div id="info_input_button">
-					<input type="reset" value="취소하기" />
+					<input type="reset" value="취소하기"/>
 					<input type="button" id="insertBtn" value="가입하기" />
 				</div>
 				

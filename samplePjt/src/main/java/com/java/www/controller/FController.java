@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.java.www.service.DoLoginService;
+import com.java.www.service.MInsertService;
 import com.java.www.service.N_listSelectService;
 import com.java.www.service.Service;
 
@@ -26,7 +27,7 @@ public class FController extends HttpServlet {
 		String cPath = request.getContextPath();
 		String fileName = uri.substring(cPath.length());
 		//파일호출 이름
-		System.out.println("파일호출 이름 : "+fileName);
+		System.out.println("파일호출 이름22 : "+fileName);
 		
 		//switch
 		switch(fileName) {
@@ -37,7 +38,12 @@ public class FController extends HttpServlet {
 			response.sendRedirect("join01_terms.jsp");
 			break;
 		case "/join02_info_input.do":
-			response.sendRedirect("join02_info_input.jsp");
+			url = "join02_info_input.jsp";
+			break;
+		case "/join03_success.do":
+			service = new MInsertService();
+			service.execute(request, response);
+			url = "join03_success.jsp";
 			break;
 		case "/login.do":
 			response.sendRedirect("login.jsp");
@@ -58,8 +64,7 @@ public class FController extends HttpServlet {
 			url="n_list.jsp";
 			break;
 		
-		default:
-			break;
+		
 			
 		}//switch
 		

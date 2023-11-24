@@ -26,7 +26,7 @@ public class FController extends HttpServlet {
 		String cPath = request.getContextPath();
 		String fileName = uri.substring(cPath.length());
 		//파일호출 이름
-		System.out.println("파일호출 이름 : "+fileName);
+		System.out.println("파일호출 이름33 : "+fileName);
 		
 		//switch
 		switch(fileName) {
@@ -56,6 +56,7 @@ public class FController extends HttpServlet {
 			break;
 			
 		}//switch
+		
 		
 		if(url != null) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher(url);
