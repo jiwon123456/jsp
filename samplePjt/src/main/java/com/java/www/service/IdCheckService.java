@@ -15,6 +15,7 @@ public class IdCheckService {
 		else result = "사용불가능";
 		
 		
+		System.out.println("result : "+result);
 		
 		return result;
 	}

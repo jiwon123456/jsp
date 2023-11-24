@@ -1,28 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 	<head>
-	    <c:if test="${param.f_agree != 'agree'}">
+	    <c:if test="${session_id = null}">
 			<script>
-			alert("${param.f_agree}");
-			alert("약관동의 없이는 회원가입이 불가합니다.");
-			location.href="join01_terms.do";
+			alert("로그인을 하셔야 접근이 가능합니다.");
+			location.href="login.do";
 			</script>
 		</c:if>
 		<meta charset="UTF-8">
 		<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>	
 		<link rel="stylesheet" type="text/css" href="css/style_join02_info_input.css">
-		<title>회원가입 - 회원정보입력 </title>
+		<title>회원정보수정</title>
 		<style>
 		.txtOn{color:blue; font-weight:900;}
 		.txtOff{color:red; font-weight:900;}
 		</style>
 		<script>
 			$(function(){
-					var idConfirm = 0;
 				
 				$("#insertBtn").click(function(){
 					//alert($("#id").val));
@@ -46,20 +45,8 @@
 					}
 					//전송
 					agreeFrm.submit();
-				});
+					});
 				
-				//pw1, pw2 비교
-				$("#pw2").keyup(function(){
-					if($("#pw1").val()!=$("#pw2").val()){
-						$("#txtPw").text("비밀번호가 일치하지 않습니다.");
-						$("#txtPw").addClass("txtOff");
-						$("#txtPw").removeClass("txtOn");
-					}else{
-						$("#txtPw").text("비밀번호가 일치합니다.");
-						$("#txtPw").addClass("txtOn");
-						$("#txtPw").removeClass("txtOff");
-					}
-				});
 				
 				//우편번호 검색
 				$("#postBtn").click(function(){
@@ -72,37 +59,8 @@
 					        $("#address1").val(data.address);   
 					        }
 					    }).open();
-				});
+						});
 				
-				//아이디 확인
-				$("#idChkBtn").click(function(){
-					alert("아이디를 중복체크합니다.");
-					var id = $("#id").val();
-					$.ajax({
-						url:"IdCheck",
-						type:"post",
-						data:{"id":id},
-						dataType:"text", //text,json,xml,html
-						success:function(data){
-							//alert(data);
-							if(data=='사용가능'){
-								$("#txtIdChk").text("사용 가능한 아이디입니다.");
-								$("#txtIdChk").addClass("txtOn");
-								$("#txtIdChk").removeClass("txtOff");
-								idConfirm = 1;
-							}else{
-								$("#txtIdChk").text("사용 불가능한 아이디입니다.");
-								$("#txtIdChk").removeClass("txtOn");
-								$("#txtIdChk").addClass("txtOff");
-								idConfirm = 0;
-							}
-							
-							console.log("받은 결과값 : "+data)
-						},			
-						error:function(){
-							alert("실패");
-						}
-						
 					});//ajax
 				});//idChkBtn
 			});//jquery
@@ -144,18 +102,17 @@
 		
 		
 		<section>
-			<form name="agreeFrm" method="post" action="join03_success.do">
+			<form name="agreeFrm" method="post" action="doM_info_input.do">
 				<div id="subBanner"></div>
 				<div id="locationN">
 					<ul>
 						<li>HOME</li>
-						<li>회원가입</li>
-						<li>회원정보입력</li>
+						<li>회원수정</li>
 					</ul>
 				</div>
 				
 				<div id="sub_top_area">
-					<h3>회원가입</h3>
+					<h3>회원수정</h3>
 				</div>
 				
 				<div id="join_step_div">
@@ -166,7 +123,7 @@
 						</li>
 						<li>
 							<span>STEP.2</span>
-							<p>회원정보</p>
+							<p>회원정보수정/p>
 						</li>
 						<li>
 							<span>STEP.3</span>
@@ -185,21 +142,14 @@
 							<div></div>
 							<label for="name">이름</label>
 						</dt>
-						<dd>
-							<input type="text" id="name" name="name" required/>
-						</dd>
+						<dd>${mdto.name}</dd>
 					</dl>
 					<dl id="join_id_dl">
 						<dt>
 							<div></div>
 							<label for="id">아이디</label>
 						</dt>
-						<dd>
-							<input type="text" id="id" name="id" minlength="4" maxlength="16" required/>
-							<input type="button" id="idChkBtn" value="중복확인"/> 
-							<span id="txtIdChk">사용 가능한 아이디입니다.</span>
-							<span>4~16자리의 영문, 숫자, 특수기호(_)만 사용하실 수 있습니다. 첫 글자는 영문으로 입력해 주세요.</span>
-						</dd>
+						<dd>${mdto.id}</dd>
 					</dl>
 					<dl id="join_pw1_dl">
 						<dt>
@@ -274,12 +224,14 @@
 							<div></div>
 							<label for="f_tell">휴대전화</label>
 						</dt>
+						<!-- 010-1111-1111 -> 010 / 1111 / 1111 -->
+						<c:set var="phones" value="${fn:split(mdto.phone,'-')}" />
 						<dd>
-							<input type="text" id="f_tell" name="f_tell" maxlength="3" required />
+							<input type="text" id="f_tell" name="f_tell" maxlength="3" value="${phones[0]}" required />
 							<span> - </span>
-							<input type="text" id="m_tell" name="m_tell" maxlength="4" required />
+							<input type="text" id="m_tell" name="m_tell" maxlength="4" value="${phones[1]}" required />
 							<span> - </span>
-							<input type="text" id="l_tell" name="l_tell" maxlength="4" required />
+							<input type="text" id="l_tell" name="l_tell" maxlength="4" value="${phones[2]}" required />
 						</dd>
 					</dl>
 					</dl>
@@ -290,9 +242,13 @@
 						</dt>
 						<dd>
 							<div>
-								<input type="radio" name="gender" id="male" value="male" checked="checked"/>
+								<input type="radio" name="gender" id="male" value="male" 
+								  <c:if test="${fn:contains(mdto.gender,'male')}"> checked </c:if>
+								/>
 								<label for="male">남성</label>
 								<input type="radio" name="gender" id="female" value="female" />
+								  <c:if test="${fn:contains(mdto.gender,'female')}"> checked </c:if>
+								/>
 								<label for="female">여성</label>
 							</div>
 						</dd>
@@ -313,27 +269,39 @@
 						<dd>
 							<ul>
 								<li>
-									<input type="checkbox" name="hobby" id="game" value="computer" />
+									<input type="checkbox" name="hobby" id="game" value="game" 
+										  <c:if test="${fn:contains(mdto.hobby,'game')}"> checked </c:if>
+										/>
 									<label for="game">게임</label>
 								</li>
 								<li>
-									<input type="checkbox" name="hobby" id="golf" value="movie" />
+									<input type="checkbox" name="hobby" id="golf" value="golf" 
+									  <c:if test="${fn:contains(mdto.hobby,'golf')}"> checked </c:if>
+										/>
 									<label for="golf">골프</label>
 								</li>
 								<li>
-									<input type="checkbox" name="hobby" id="run" value="music" />
+									<input type="checkbox" name="hobby" id="run" value="run" 
+									  <c:if test="${fn:contains(mdto.hobby,'run')}"> checked </c:if>
+										/>
 									<label for="run">조깅</label>
 								</li>
 								<li>
-									<input type="checkbox" name="hobby" id="cook" value="shopping" />
+									<input type="checkbox" name="hobby" id="cook" value="cook" 
+									  <c:if test="${fn:contains(mdto.hobby,'cook')}"> checked </c:if>
+										/>
 									<label for="cook">요리</label>
 								</li>
 								<li>
-									<input type="checkbox" name="hobby" id="book" value="game" />
+									<input type="checkbox" name="hobby" id="book" value="book" 
+									  <c:if test="${fn:contains(mdto.hobby,'book')}"> checked </c:if>
+										/>
 									<label for="book">독서</label>
 								</li>
 								<li>
-									<input type="checkbox" name="hobby" id="culture" value="culture" />
+									<input type="checkbox" name="hobby" id="culture" value="culture" 
+									  <c:if test="${fn:contains(mdto.hobby,'culture')}"> checked </c:if>
+										/>
 									<label for="culture">문화/예술</label>
 								</li>
 							</ul>
@@ -342,7 +310,7 @@
 				</fieldset>
 				<div id="info_input_button">
 					<input type="reset" value="취소하기"/>
-					<input type="button" id="insertBtn" value="가입하기" />
+					<input type="button" id="insertBtn" value="수정하기" />
 				</div>
 				
 			</form>

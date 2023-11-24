@@ -7,12 +7,15 @@ import javax.servlet.http.HttpSession;
 import com.java.www.dao.MemberDao;
 import com.java.www.dto.MemberDto;
 
-public class MInsertService implements Service {
+public class MUpdateService implements Service {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		String id = request.getParameter("id");
-		String pw1 = request.getParameter("pw1");
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("session_id");
+		System.out.println("MUpdateService id : "+id);
+		String pw = request.getParameter("pw1");
+		System.out.println("MUpdateService pw1 : "+pw);
 		String name = request.getParameter("name");
 		String f_tell = request.getParameter("f_tell");
 		String m_tell = request.getParameter("m_tell");
@@ -26,14 +29,15 @@ public class MInsertService implements Service {
 			else hobby += "," + hobbys[i];
 		}
 		
-		MemberDto mdto = new MemberDto(id, pw1, name, phone, gender, hobby);
-		
-		//dao접근
+		MemberDto mdto = new MemberDto(id, pw, name ,phone, gender, hobby);
+
+		//dao접근 - update
 		MemberDao mdao = new MemberDao();
-		int result = mdao.mInsert(mdto);
-		
+		int result = mdao.mUpdate(mdto);
+		System.out.println("UpdateService result : "+result);
 		//request
 		request.setAttribute("result", result);
+		
 	}
 
 }

@@ -8,9 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.java.www.service.DoLoginService;
 import com.java.www.service.MInsertService;
+import com.java.www.service.MSelectOneService;
+import com.java.www.service.MUpdateService;
 import com.java.www.service.N_listSelectService;
 import com.java.www.service.Service;
 
@@ -20,6 +23,8 @@ public class FController extends HttpServlet {
 	protected void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doAction");
 		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+		
 		String url = null;
 		Service service = null;
 		//파일이름 추출
@@ -27,7 +32,8 @@ public class FController extends HttpServlet {
 		String cPath = request.getContextPath();
 		String fileName = uri.substring(cPath.length());
 		//파일호출 이름
-		System.out.println("파일호출 이름22 : "+fileName);
+		System.out.println("파일호출 이름 : "+fileName);
+		System.out.println("섹션 아이디 : "+session.getAttribute("session_id"));
 		
 		//switch
 		switch(fileName) {
@@ -47,6 +53,16 @@ public class FController extends HttpServlet {
 			break;
 		case "/login.do":
 			response.sendRedirect("login.jsp");
+			break;
+		case "/minfo_input.do": //회원정보수정 페이지 - 회원정보 1명 가져오기
+			service = new MSelectOneService();
+			service.execute(request, response);
+			url = "minfo_input.jsp";
+			break;
+		case "/doM_info_input.do": //회원정보수정
+			service = new MUpdateService();
+			service.execute(request, response);
+			url = "doM_info_input.jsp";
 			break;
 		case "/logout.do":
 			response.sendRedirect("logout.jsp");

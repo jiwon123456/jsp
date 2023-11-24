@@ -27,6 +27,7 @@ public class IdCheck extends HttpServlet {
 		IdCheckService idCheckService = new IdCheckService();
 		//리턴 - 사용가능, 사용불가능
 		String result = idCheckService.idCheck(id);
+		System.out.println("doAction result : "+result);
 		
 		//ajax전송
 		response.setCharacterEncoding("utf-8");

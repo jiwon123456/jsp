@@ -119,5 +119,33 @@ public class MemberDao {
 		return result;
 	}
 	
+	//4.회원정보수정 update
+	public int mUpdate(MemberDto mdto2) {
+		try {
+			conn = getConnection();
+			query = "update member set pw=?, phone=?, gender=?, hobby=? where id=?";
+			pstmt = conn.prepareStatement(query);
+			//1.2
+			pstmt.setString(1, mdto2.getPw());
+			System.out.println("MemberDao pw : "+mdto2.getPw());
+			pstmt.setString(2, mdto2.getPhone());
+			pstmt.setString(3, mdto2.getGender());
+			pstmt.setString(4, mdto2.getHobby());
+			pstmt.setString(5, mdto2.getId());
+			
+			result = pstmt.executeUpdate();
+			
+			
+		} catch (Exception e) {e.printStackTrace();
+		}finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e2) {e2.printStackTrace();}
+		}
+		return result;
+	}
+	
 	
 }//public
