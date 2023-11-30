@@ -1,27 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <title>Pages - Login</title>
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700,900&display=swap&subset=korean" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/write.css">
+  <script>
+  	$(function(){
+  		$(".write").click(function(){
+  			if($("#btitle").val()==""){
+  				alert("제목을 입력하세요.");
+  				$("#btitle").focus();
+  				return false;
+  			}
+  			
+  			insertFrm.submit();
+  		});//write
+  	});//jquery
+  </script>
 </head>
 
 <body>
   <header>
-    <ul>
-      <li>회원가입</li> <span>|</span>
-      <li>로그인</li> <span>|</span>
-      <li>고객행복센터</li> <span>|</span>
-      <li>배송지역검색</li> <span>|</span>
-      <li>기프트카드 등록</li>
-    </ul>
+	    <ul>
+		    <c:if test="${session_id == null }">
+			  <li><a href="join01_terms.do">회원가입</a></li> <span>|</span>
+			  <li><a href="login.do">로그인</a></li><span>|</span>
+			</c:if>
+			<c:if test="${session_id != null }">
+			 <li class="txtbold"><a href="minfo_input.do">${session_name}님</a></li><span>|</span>
+			 <li><a href="logout.do">로그아웃</a></li><span>|</span>
+			</c:if>
+		   	  <li><a href="n_list.do">고객행복센터</a></li><span>|</span>
+		      <li>배송지역검색</li><span>|</span>
+		      <li>기프트카드 등록</li>
+	    </ul>
   </header>
 
   <nav>
-    <div class="logo"></div>
+    <a href="main.do"><div class="logo"></div></a>
 
     <div id="search">
       <div class="search"></div><br>
@@ -48,45 +72,34 @@
     <h1>관리자 글쓰기</h1>
     <hr>
 
-    <form action="/write" name="write" method="post">
+    <form action="doN_insert.do" name="insertFrm" method="post" enctype="multipart/form-data">
       <table>
         <colgroup>
           <col width="15%">
           <col width="85%">
         </colgroup>
         <tr>
-          <th>분류</th>
-          <td>
-            <div class="category-wrapper">
-              <select name="category" id="category">
-                <option value="notice">공지</option>
-                <option value="event">이벤트</option>
-              </select>  
-            </div>
-          </td>
-        </tr>
-        <tr>
           <th>제목</th>
           <td>
-            <input type="text" name="title">
+            <input type="text" name="btitle" id="btitle">
           </td>
         </tr>
         <tr>
           <th>내용</th>
           <td>
-            <textarea name="content" cols="50" rows="10"></textarea>
+            <textarea name="bcontent" cols="50" rows="10"></textarea>
           </td>
         </tr>
         <tr>
           <th>이미지 표시</th>
           <td>
-            <input type="file" name="file" id="file">
+            <input type="file" name="bfile" id="file">
           </td>
         </tr>
       </table>
       <hr>
       <div class="button-wrapper">
-        <button type="submit" class="write">작성완료</button>
+        <button type="button" class="write">작성완료</button>
         <button type="button" class="cancel">취소</button>
       </div>
     </form>

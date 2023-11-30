@@ -15,6 +15,12 @@ public class N_listSelectService implements Service {
 		// dao 접근 - select
 		BoardDao bdao = new BoardDao();
 		
+		//검색부분
+		String category = request.getParameter("category");
+		String sword = request.getParameter("sword");
+		System.out.println("N_listservice category :"+category);
+		System.out.println("N_listservice sword :"+sword);
+		
 		
 		//하단 넘버링 필요내용
 		//현재페이지, 게시글전체개수, 최대페이지 ,시작페이지, 끝페이지 
@@ -27,8 +33,10 @@ public class N_listSelectService implements Service {
 			page =Integer.parseInt(request.getParameter("page")); //page가 없는데 ,에러
 		}
 		System.out.println("service 현재 페이지 : "+page);
-		int listCount = bdao.nListCount();
+		//게시글 수 - category,sword
+		int listCount = bdao.nListCount(category,sword);
 		System.out.println("N_listSelectService : "+listCount);
+		
 		int maxPage = (int) Math.ceil((double)listCount/rowPage);
 		//1,1,1,1,1,1,1,1,1,1,11,11,11,11,11,11,11,...21..
 		int startPage = (int)((page-1)/bottomPage)*bottomPage+1; 
@@ -38,7 +46,8 @@ public class N_listSelectService implements Service {
 		int endRow = startRow+10-1; //10,20,30,40,50
 		//------------- 하단 넘버링 필요내용 끝 ----------------
 		
-		ArrayList<BoardDto> list = bdao.n_listSelect(startRow,endRow);
+		//전체게시글, 검색 가져오기
+		ArrayList<BoardDto> list = bdao.n_listSelect(category,sword,startRow,endRow);
 		
 		//request 추가
 		request.setAttribute("list", list);
@@ -47,6 +56,8 @@ public class N_listSelectService implements Service {
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("startPage", startPage);
 		request.setAttribute("endPage", endPage);
+		request.setAttribute("category", category);
+		request.setAttribute("sword", sword);
 
 	}
 

@@ -14,6 +14,11 @@ import com.java.www.service.DoLoginService;
 import com.java.www.service.MInsertService;
 import com.java.www.service.MSelectOneService;
 import com.java.www.service.MUpdateService;
+import com.java.www.service.N_DeleteService;
+import com.java.www.service.N_InsertService;
+import com.java.www.service.N_ReplyInsertService;
+import com.java.www.service.N_SelectOneService;
+import com.java.www.service.N_UpdateService;
 import com.java.www.service.N_listSelectService;
 import com.java.www.service.Service;
 
@@ -78,6 +83,54 @@ public class FController extends HttpServlet {
 			service = new N_listSelectService();
 			service.execute(request, response);
 			url="n_list.jsp";
+			break;
+		case "/n_view.do":
+			//service호출
+			service = new N_SelectOneService();
+			service.execute(request, response);
+			url="n_view.jsp";
+			break;
+		case "/n_insert.do": //글쓰기
+			response.sendRedirect("n_insert.jsp");
+			break;
+		case "/doN_insert.do":
+			//service호출
+			service = new N_InsertService();
+			service.execute(request, response);
+			url="doN_insert.jsp";
+			break;
+		case "/n_reply.do":
+			//service호출
+			service = new N_SelectOneService();
+			service.execute(request, response);
+			url="n_reply.jsp";
+			break;
+		case "/doN_reply.do":
+			//service호출
+			service = new N_ReplyInsertService();
+			service.execute(request, response);
+			url="doN_reply.jsp";
+			break;
+		case "/n_update.do":
+			//service호출
+			service = new N_SelectOneService();
+			service.execute(request, response);
+			url="n_update.jsp";
+			break;
+		case "/doN_update.do":
+			//service호출
+			service = new N_UpdateService();
+			service.execute(request, response);
+			url="doN_update.jsp";
+			break;
+		case "/n_delete.do":
+			//service호출
+			service = new N_DeleteService();
+			service.execute(request, response);
+			url="n_delete.jsp";
+			break;
+			
+		default:
 			break;
 		
 		

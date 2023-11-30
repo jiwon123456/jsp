@@ -1,28 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <title>Document</title>
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700,900&display=swap&subset=korean" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/read.css">
+  <script>
+  		$(function(){
+  			$("#deleteBtn").click(function(){
+  				if(confirm("게시글을 삭제하시겠습니까?")){
+  					location.href="n_delete.do?page=${page}&bno=${bdto.bno}&category=${category}&sword=${sword}";
+  				}
+  				
+  			});//deleteBtn
+  		});//jquery
+  </script>
 </head>
 
 <body>
   <header>
     <ul>
-      <li>회원가입</li> <span>|</span>
-      <li>로그인</li> <span>|</span>
-      <li>고객행복센터</li> <span>|</span>
-      <li>배송지역검색</li> <span>|</span>
-      <li>기프트카드 등록</li>
+	    <c:if test="${session_id == null }">
+		  <li><a href="join01_terms.do">회원가입</a></li> <span>|</span>
+		  <li><a href="login.do">로그인</a></li><span>|</span>
+		</c:if>
+		<c:if test="${session_id != null }">
+		 <li class="txtbold"><a href="minfo_input.do">${session_name}님</a></li><span>|</span>
+		 <li><a href="logout.do">로그아웃</a></li><span>|</span>
+		</c:if>
+	   	  <li><a href="n_list.do">고객행복센터</a></li><span>|</span>
+	      <li>배송지역검색</li><span>|</span>
+	      <li>기프트카드 등록</li>
     </ul>
   </header>
 
   <nav>
-    <div class="logo"></div>
+    <a href="main.do"><div class="logo"></div></a>
 
     <div id="search">
       <div class="search"></div><br>
@@ -50,26 +71,35 @@
 
     <table>
       <tr>
-        <th>[키즈잼] 2020년 이용 시간 & 이용 요금 변경 안내</th>
+        <th><strong>제목</strong><span class="separator">|</span> ${bdto.btitle}</th>
       </tr>
       <tr>
-        <td>2019-12-11</td>
+        <td><strong>날짜</strong><span class="separator">|</span> <fmt:formatDate value="${bdto.bdate}" pattern="yyyy-MM-dd"/> </td>
+      </tr>
+      <tr>
+        <td class="article">${bdto.bcontent}</td>
       </tr>
       <tr>
         <td class="article">
-          <img src="https://www.midashotel.co.kr/Midas_uploads/2019-12-11%2017-13-142020%EB%85%84_%ED%82%A4%EC%A6%88%EC%9E%BC_%EB%B3%80%EA%B2%BD%EC%82%AC%ED%95%AD_%EC%95%88%EB%82%B4.jpg" alt="" width="80%"></td>
+          <img src="upload/${bdto.bfile}" alt="" width="50%">
+        </td>
       </tr>
       <tr>
-        <td><strong>다음글</strong> <span class="separator">|</span> [키즈잼] 2월 프로그램 안내</td>
+        <td><strong>다음글</strong> <span class="separator">|</span> 
+        	<a href="n_view.do?page=${page}&bno=${nextDto.bno}&category=${category}&sword=${sword}">${nextDto.btitle}</a>
+        </td>
       </tr>
       <tr>
-        <td><strong>이전글</strong> <span class="separator">|</span> [키즈잼] 2020년 1분기 정기 휴관일 안내</td>
+        <td><strong>이전글</strong> <span class="separator">|</span> 
+        	<a href="n_view.do?page=${page}&bno=${preDto.bno}&category=${category}&sword=${sword}">${preDto.btitle}</a>
+        </td>
       </tr>
     </table>
 
-    <div class="list">목록</div>
-    <div class="list">삭제</div>
-    <div class="list">수정</div>
+    <a href="n_list.do?page=${page}&category=${category}&sword=${sword}"><div class="list">목록</div></a> 
+     <div class="list" id="deleteBtn">삭제</div>
+     <a href="n_update.do?page=${page}&bno=${bdto.bno}&category=${category}&sword=${sword}"><div class="list">수정</div></a>
+     <a href="n_reply.do?page=${page}&bno=${bdto.bno}&category=${category}&sword=${sword}"><div class="list">답글달기</div></a>
   </section>
 
   <footer>
