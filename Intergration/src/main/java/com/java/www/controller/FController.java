@@ -34,7 +34,7 @@ public class FController extends HttpServlet {
 		String fileName = uri.substring(cPath.length()+1);
 		//파일호출 이름
 	    System.out.println("파일호출 이름 : "+fileName);
-	    System.out.println("섹션 아이디 : "+session.getAttribute("session_memberId "));
+	    //System.out.println("섹션 아이디 : "+session.getAttribute("session_memberId "));
 				
 		
 		switch(fileName){

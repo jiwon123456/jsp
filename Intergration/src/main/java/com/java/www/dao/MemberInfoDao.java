@@ -63,8 +63,8 @@ public class MemberInfoDao {
 			}finally {
 				try {
 					if(rs != null) rs.close();
-					if(conn != null) conn.close();
 					if(pstmt != null) pstmt.close();
+					if(conn != null) conn.close();
 				} catch (Exception e2) {e2.printStackTrace();}
 			}
 			return mdto;
@@ -87,8 +87,8 @@ public class MemberInfoDao {
 			}finally {
 				try {
 					if(rs != null) rs.close();
-					if(conn != null) conn.close();
 					if(pstmt != null) pstmt.close();
+					if(conn != null) conn.close();
 				} catch (Exception e2) {e2.printStackTrace();}
 			}
 			return result;
@@ -117,16 +117,47 @@ public class MemberInfoDao {
 			}finally {
 				try {
 					if(rs != null) rs.close();
-					if(conn != null) conn.close();
 					if(pstmt != null) pstmt.close();
+					if(conn != null) conn.close();
 				} catch (Exception e2) {e2.printStackTrace();}
 			}
 			return mdto;
 		}//selectOne
-
+		
+		//4.회원정보 수정 update
 		public int doMUpdate(MemberInfoDto mdto2) {
-			// TODO Auto-generated method stub
-			return 0;
+			try {
+				conn = getConnection();
+				query = "update memberinfo set email=?,address=?,birthday=? where memberId=?";
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, mdto2.getEmail());
+				pstmt.setString(2, mdto2.getAddress());
+				System.out.println("doMUpdate : "+mdto2.getAddress());
+				pstmt.setTimestamp(3, mdto2.getBirthday());
+				pstmt.setString(4, mdto2.getMemberId());
+				
+				result = pstmt.executeUpdate();
+				System.out.println("dao result : "+result);
+				
+				
+				/*
+				conn = getConnection();
+				query = "update memberinfo set email='aaa@naver.com',address='서울',birthday=sysdate where memberId='aaa'";
+				
+				System.out.println("doMUpdate : "+mdto2.getAddress());
+				System.out.println("doMUpdate query : "+query);
+				result = 1;
+				System.out.println("dao result : "+result);
+				*/
+			} catch (Exception e) {e.printStackTrace();
+			}finally {
+				try {
+					if(rs != null) rs.close();
+					if(pstmt != null) pstmt.close();
+					if(conn != null) conn.close();
+				} catch (Exception e2) {e2.printStackTrace();}
+			}
+			return result;
 		}
 		
 }//public

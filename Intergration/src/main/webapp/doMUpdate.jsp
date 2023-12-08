@@ -12,6 +12,5 @@
 			alert("회원정보 수정이 완료되었습니다.");
 			location.href= "html/main.do";
 		</script>
-	
 	</body>
 </html>

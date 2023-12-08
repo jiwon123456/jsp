@@ -30,6 +30,13 @@ public class MemberInfoDto {
 		this.email = email;
 	}
 
+	public MemberInfoDto(String memberId, String email, String address, Timestamp birthday) {
+		this.memberId = memberId;
+		this.email = email;
+		this.address = address;
+		this.birthday = birthday;
+	}
+
 	private String memberId;
 	private String NicName;
 	private String mempw;

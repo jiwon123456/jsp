@@ -81,7 +81,7 @@ $(document).ready(function() {
 
 
 		<div class="memberbd">
-		<form name="m_frm" method="post" action="doM_info_update.do">
+		<form name="m_frm" method="post" action="doMUpdate.do">
 			<input type="hidden" name="memberid" value="${mdto.memberId}">
 			<table summary="이름, 아이디, 비밀번호, 비밀번호 확인, 이메일, 이메일 수신여부, 주소, 휴대폰, 유선전화, 생년월일 순으로 회원가입 시 입력한 정보를 수정할 수 있습니다." class="memberWrite" border="1" cellspacing="0">
 			<caption>회원가입 정보 수정</caption>
@@ -99,6 +99,15 @@ $(document).ready(function() {
 					<td style="font-family: 'JeonjuCraftGoR' !important;">${mdto.memberId}</td>
 				</tr>
 				<script>
+					$(function(){
+						$(".pwBtn").click(function(){
+							$.ajax({
+								url:"pwCheck"
+								
+							});//ajax							
+						});//pwBtn
+					});//jquery	
+				
 				</script>
 				
 				<!-- 비밀번호 수정 -->
