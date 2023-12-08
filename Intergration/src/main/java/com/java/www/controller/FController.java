@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import com.java.www.service.DoLoginService;
 import com.java.www.service.DoMInsertService;
+import com.java.www.service.MSelectOneService;
+import com.java.www.service.MdoMUpdateService;
 import com.java.www.service.Service;
 
 @WebServlet("*.do")
@@ -61,10 +63,15 @@ public class FController extends HttpServlet {
 			service.execute(request, response);
 			url = "doLogin.jsp";
 			break;
-		case "review/review_List.do":
-			service =  new DoLoginService();
+		case "change_info.do":
+			service =  new MSelectOneService();
 			service.execute(request, response);
-			url = "review_List.jsp";
+			url = "change_info.jsp";
+			break;
+		case "doMUpdate.do":
+			service =  new MdoMUpdateService();
+			service.execute(request, response);
+			url = "doMUpdate.jsp";
 			break;
 		case "Logout.do":
 			response.sendRedirect("Logout.jsp");

@@ -123,5 +123,10 @@ public class MemberInfoDao {
 			}
 			return mdto;
 		}//selectOne
+
+		public int doMUpdate(MemberInfoDto mdto2) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 		
 }//public

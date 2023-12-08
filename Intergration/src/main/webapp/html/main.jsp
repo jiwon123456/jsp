@@ -590,7 +590,7 @@ top:50%;
               <c:if test="${session_memberId != null }">  
                 <li class="header-subitem">
                   <a class="header-sublink" href="javascript:void(0)">
-                    <span>마이페이지</span>
+                    <span><a href="../change_info.do">마이페이지</a></span>
                   </a>
                 </li>
                 <li class="header-subitem">
